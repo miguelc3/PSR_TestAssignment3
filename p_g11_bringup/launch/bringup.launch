@@ -4,7 +4,7 @@
      <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
      <arg name="player_name" default="p_g11"/>
      <arg name="player_color" default="Green"/>
-<!--     <arg name="visualize" default="false"/>-->
+     <arg name="visualize" default="false"/>
      <arg name="x_pos" default="-0.5"/>
      <arg name="y_pos" default="-1.0"/>
      <arg name="z_pos" default="0.0"/>
@@ -26,9 +26,9 @@
         </include>
 
         <!--    Include rviz visualization-->
-<!--        <group if="$(arg visualize)">-->
-<!--            <include file="$(find p_g11_bringup)/launch/visualize.launch"/>-->
-<!--        </group>-->
+        <group if="$(arg visualize)">
+            <include file="$(find p_g11_bringup)/launch/visualize.launch"/>
+        </group>
 
     </group>
 
