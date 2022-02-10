@@ -54,7 +54,7 @@ class Driver():
         # self.goal = copy.copy(msg)  # Store goal
         # self.goal_active = True
 
-    def driveSraight(self, min_speed=0.2, max_speed=1.5):
+    def driveSraight(self, min_speed=0.2, max_speed=1):
 
         goal_copy = copy.deepcopy(self.goal)  # make sure we don't change the stamp field of the goal
         goal_copy.header.stamp = rospy.Time.now()
