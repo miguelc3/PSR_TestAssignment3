@@ -6,8 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /Image1
-        - /Map1
       Splitter Ratio: 0.5
     Tree Height: 227
   - Class: rviz/Selection
@@ -184,8 +182,6 @@ Visualization Manager:
           Value: true
         p_g11/imu_link:
           Value: true
-        p_g11/map:
-          Value: true
         p_g11/odom:
           Value: true
         p_g11/wheel_left_link:
@@ -199,29 +195,28 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        p_g11/map:
-          p_g11/odom:
-            p_g11/base_footprint:
-              p_g11/base_link:
-                p_g11/base_scan:
-                  {}
-                p_g11/camera_link:
-                  p_g11/camera_depth_frame:
-                    p_g11/camera_depth_optical_frame:
-                      {}
-                  p_g11/camera_rgb_frame:
-                    p_g11/camera_rgb_optical_frame:
-                      {}
-                p_g11/caster_back_left_link:
-                  {}
-                p_g11/caster_back_right_link:
-                  {}
-                p_g11/imu_link:
-                  {}
-                p_g11/wheel_left_link:
-                  {}
-                p_g11/wheel_right_link:
-                  {}
+        p_g11/odom:
+          p_g11/base_footprint:
+            p_g11/base_link:
+              p_g11/base_scan:
+                {}
+              p_g11/camera_link:
+                p_g11/camera_depth_frame:
+                  p_g11/camera_depth_optical_frame:
+                    {}
+                p_g11/camera_rgb_frame:
+                  p_g11/camera_rgb_optical_frame:
+                    {}
+              p_g11/caster_back_left_link:
+                {}
+              p_g11/caster_back_right_link:
+                {}
+              p_g11/imu_link:
+                {}
+              p_g11/wheel_left_link:
+                {}
+              p_g11/wheel_right_link:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -255,6 +250,42 @@ Visualization Manager:
       Unreliable: false
       Use Timestamp: false
       Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 0; 255; 0
+      Color Transformer: FlatColor
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Min Color: 0; 0; 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.10000000149011612
+      Style: Spheres
+      Topic: /p_g11/point_cloud
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Class: rviz/MarkerArray
+      Enabled: false
+      Marker Topic: /p_g11/markers
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -283,7 +314,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 19.173858642578125
+      Distance: 8.066493034362793
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
