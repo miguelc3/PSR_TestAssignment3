@@ -26,9 +26,9 @@
         </include>
 
         <!--    Include rviz visualization-->
-<!--        <group if="$(arg visualize)">-->
+        <group if="$(arg visualize)">
          <include file="$(find p_g11_bringup)/launch/visualize.launch"/>
-<!--        </group>-->
+        </group>
 
     </group>
 

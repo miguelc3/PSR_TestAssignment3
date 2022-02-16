@@ -1,0 +1,85 @@
+<launch>
+
+    <!--    <include command="load" file="$(find p_mpereira_bringup)/params/game.yaml"/>-->
+    <rosparam command="load" file="$(find p_g11_bringup)/params/game.yaml"/>
+
+    <!--    RED TEAM-->
+    <include file="$(find p_g11_bringup)/launch/bringup.launch">
+        <arg name="player_name" value="red1"/>
+        <arg name="player_color" value="Red"/>
+        <arg name="x_pos" value="1.0"/>
+        <arg name="y_pos" value="-2.0"/>
+        <arg name="z_pos" value="0.0"/>
+    </include>
+
+<!--    <include file="$(find p_g11_bringup)/launch/visualize.launch">-->
+<!--        <arg name="player_name" value="red1"/>-->
+<!--    </include>-->
+
+    <include file="$(find p_g11_bringup)/launch/bringup.launch">
+        <arg name="player_name" value="red2"/>
+        <arg name="player_color" value="Red"/>
+        <arg name="x_pos" value="6.0"/>
+        <arg name="y_pos" value="4.0"/>
+        <arg name="z_pos" value="0.0"/>
+    </include>
+
+    <include file="$(find p_g11_bringup)/launch/bringup.launch">
+        <arg name="player_name" value="red3"/>
+        <arg name="player_color" value="Red"/>
+        <arg name="x_pos" value="-8.0"/>
+        <arg name="y_pos" value="4.0"/>
+        <arg name="z_pos" value="0.0"/>
+    </include>
+
+    <!--    GREEN TEAM-->
+    <include file="$(find p_g11_bringup)/launch/bringup.launch">
+        <arg name="player_name" value="green1"/>
+        <arg name="player_color" value="Green"/>
+        <arg name="x_pos" value="6.0"/>
+        <arg name="y_pos" value="-1.0"/>
+        <arg name="z_pos" value="0.0"/>
+    </include>
+
+    <include file="$(find p_g11_bringup)/launch/bringup.launch">
+        <arg name="player_name" value="green2"/>
+        <arg name="player_color" value="Green"/>
+        <arg name="x_pos" value="-3.0"/>
+        <arg name="y_pos" value="0.0"/>
+        <arg name="z_pos" value="0.0"/>
+    </include>
+
+    <include file="$(find p_g11_bringup)/launch/bringup.launch">
+        <arg name="player_name" value="green3"/>
+        <arg name="player_color" value="Green"/>
+        <arg name="x_pos" value="0"/>
+        <arg name="y_pos" value="2.5"/>
+        <arg name="z_pos" value="0.0"/>
+    </include>
+
+    <!--    BLUE TEAM-->
+    <include file="$(find p_g11_bringup)/launch/bringup.launch">
+        <arg name="player_name" value="blue1"/>
+        <arg name="player_color" value="Blue"/>
+        <arg name="x_pos" value="3.0"/>
+        <arg name="y_pos" value="3.0"/>
+        <arg name="z_pos" value="0.0"/>
+    </include>
+
+    <include file="$(find p_g11_bringup)/launch/bringup.launch">
+        <arg name="player_name" value="blue2"/>
+        <arg name="player_color" value="Blue"/>
+        <arg name="x_pos" value="-6.0"/>
+        <arg name="y_pos" value="-2.0"/>
+        <arg name="z_pos" value="0.0"/>
+    </include>
+
+    <include file="$(find p_g11_bringup)/launch/bringup.launch">
+        <arg name="player_name" value="blue3"/>
+        <arg name="player_color" value="Blue"/>
+        <arg name="x_pos" value="-4.0"/>
+        <arg name="y_pos" value="2.0"/>
+        <arg name="z_pos" value="0.0"/>
+    </include>
+
+</launch>
