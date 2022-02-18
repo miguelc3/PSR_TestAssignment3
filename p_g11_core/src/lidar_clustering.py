@@ -9,7 +9,6 @@ from sensor_msgs.msg import LaserScan, PointCloud2, PointField
 from sensor_msgs import point_cloud2
 from geometry_msgs.msg import Point
 
-
 publisher = rospy.Publisher('/p_g11/markers', MarkerArray, queue_size=1)
 
 
