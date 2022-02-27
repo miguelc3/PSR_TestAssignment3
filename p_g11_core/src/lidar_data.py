@@ -7,6 +7,7 @@ import std_msgs.msg
 from sensor_msgs.msg import LaserScan
 from sensor_msgs.msg import LaserScan, PointCloud2, PointField
 from sensor_msgs import point_cloud2
+from time import time
 
 from std_msgs.msg import String
 import tf2_ros
@@ -15,7 +16,8 @@ import tf2_geometry_msgs
 import copy
 import math
 
-publisher = rospy.Publisher('/p_g11/point_cloud', PointCloud2)
+
+# publisher = rospy.Publisher('/p_g11/point_cloud', PointCloud2)
 
 class Driver():
 
@@ -43,7 +45,6 @@ class Driver():
 
         self.colision_active = False
         self.colision_subscriber = rospy.Subscriber('/p_g11/scan', LaserScan, self.callbackMessageReceived)
-
 
     def goalReceivedCallback(self, msg):
 
@@ -111,24 +112,26 @@ class Driver():
     def callbackMessageReceived(self, msg):
         rospy.loginfo('Received laser scan message')
 
-        header = std_msgs.msg.Header(seq=msg.header.seq, stamp=msg.header.stamp, frame_id=msg.header.frame_id)
-        fields = [PointField('x', 0, PointField.FLOAT32, 1),
-                  PointField('y', 4, PointField.FLOAT32, 1),
-                  PointField('z', 8, PointField.FLOAT32, 1)]
-
-        # convert from polar coordinates to cartesian and fill the point cloud
-        points = []
-        z = 0
-        for idx, range in enumerate(msg.ranges):
-            theta = msg.angle_min + msg.angle_increment * idx
-            x = range * math.cos(theta)
-            y = range * math.sin(theta)
-            points.append([x, y, z])
-
-        pc2 = point_cloud2.create_cloud(header, fields, points)  # create point_cloud2 data structure
-        publisher.publish(pc2)  # publish (will automatically convert from point_cloud2 to Pointcloud2 message)
-        rospy.loginfo('Published PointCloud2 msg')
-
+        # TRANSFORM TO POINTCLOUD (x, y, z)
+        #
+        # header = std_msgs.msg.Header(seq=msg.header.seq, stamp=msg.header.stamp, frame_id=msg.header.frame_id)
+        # fields = [PointField('x', 0, PointField.FLOAT32, 1),
+        #           PointField('y', 4, PointField.FLOAT32, 1),
+        #           PointField('z', 8, PointField.FLOAT32, 1)]
+        #
+        # # convert from polar coordinates to cartesian and fill the point cloud
+        # points = []
+        # z = 0
+        # for idx, range in enumerate(msg.ranges):
+        #     theta = msg.angle_min + msg.angle_increment * idx
+        #     x = range * math.cos(theta)
+        #     y = range * math.sin(theta)
+        #     points.append([x, y, z])
+        #
+        # pc2 = point_cloud2.create_cloud(header, fields, points)  # create point_cloud2 data structure
+        # publisher.publish(pc2)  # publish (will automatically convert from point_cloud2 to Pointcloud2 message)
+        # rospy.loginfo('Published PointCloud2 msg')
+        #
         # for idx, point in enumerate(points):
         #     dist = math.sqrt(point[1] ** 2 + point[2] ** 2)
         #     if dist > 0.1:
@@ -136,13 +139,62 @@ class Driver():
         #         self.colision_active = True
         #         self.speed = self.speed/2
         #         self.angle = -self.angle
+        time_avoid = 20
+        thresh = 0.8
+        thresh2 = 1.2
 
         for i, range in enumerate(msg.ranges):
-            if range < 0.5:
+            theta = msg.angle_min + msg.angle_increment * i
+            if range < thresh:
+                t = time()
                 self.goal_active = False
                 self.colision_active = True
-                self.speed = -0.5
-                #self.angle = -self.angle
+
+                if msg.ranges[0] < thresh:
+                    self.speed = -0.3
+                    self.angle = 0
+                elif msg.ranges[180] < thresh:
+                    self.speed = 0.3
+                    self.angle = 0
+                elif msg.ranges[30] < thresh:
+                    self.speed = 0.3
+                    self.angle = -0.5
+                elif msg.ranges[330] < thresh:
+                    self.speed = 0.3
+                    self.angle = 0.5
+            else:
+                t = 0
+
+            # if t > time_avoid:
+            #     #self.colision_active = False
+            #     self.speed = 5
+            #     self.angle = 0
+
+        # for i, range in enumerate(msg.ranges):
+        #     theta = msg.angle_min + msg.angle_increment * i
+        #     if range < thresh:
+        #         t = time()
+        #         self.goal_active = False
+        #         self.colision_active = True
+        #
+        #         if range[0] < thresh:
+        #             self.speed = -0.3
+        #             self.angle = 0
+        #         if range[180] < thresh:
+        #             self.speed = 0.3
+        #             self.angle = 0
+        #         if range[30] < thresh:
+        #             self.speed = 0.3
+        #             self.angle = -0.5
+        #         if range[330] < thresh:
+        #             self.speed = 0.3
+        #             self.angle = 0.5
+
+                # while t < time_avoid:
+                #     self.speed = 0.2
+                #     self.angle = -theta
+            # else:
+            #     self.colision_active = False
 
 
 def main():
@@ -151,7 +203,7 @@ def main():
     # =================================
     rospy.init_node('p_g11', anonymous=False)
 
-    #rospy.Subscriber('/p_g11/scan', LaserScan, callbackMessageReceived)
+    # rospy.Subscriber('/p_g11/scan', LaserScan, callbackMessageReceived)
 
     driver = Driver()
     rospy.spin()
