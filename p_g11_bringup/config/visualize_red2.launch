@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Launch config, loading configuration file -->
+    <arg name="player_name" default="red2"/>
+
+    <node name="rviz" pkg="rviz" type="rviz"
+             args="--display-config $(find p_g11_bringup)/config/visualize_red2.rviz" required="false"/>
+
+
+</launch>
+
+
+
+
+

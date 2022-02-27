@@ -3,6 +3,17 @@
     <!--    <include command="load" file="$(find p_mpereira_bringup)/params/game.yaml"/>-->
     <rosparam command="load" file="$(find p_g11_bringup)/params/game.yaml"/>
 
+<!--    Arguments to activate rviz-->
+    <arg name="visualize_blue1" default="false"/>
+    <arg name="visualize_blue2" default="false"/>
+    <arg name="visualize_blue3" default="false"/>
+    <arg name="visualize_green1" default="false"/>
+    <arg name="visualize_green2" default="false"/>
+    <arg name="visualize_green3" default="false"/>
+    <arg name="visualize_red1" default="false"/>
+    <arg name="visualize_red2" default="false"/>
+    <arg name="visualize_red3" default="false"/>
+
     <!--    RED TEAM-->
     <include file="$(find p_g11_bringup)/launch/bringup.launch">
         <arg name="player_name" value="red1"/>
@@ -11,10 +22,6 @@
         <arg name="y_pos" value="-2.0"/>
         <arg name="z_pos" value="0.0"/>
     </include>
-
-<!--    <include file="$(find p_g11_bringup)/launch/visualize.launch">-->
-<!--        <arg name="player_name" value="red1"/>-->
-<!--    </include>-->
 
     <include file="$(find p_g11_bringup)/launch/bringup.launch">
         <arg name="player_name" value="red2"/>
@@ -81,5 +88,44 @@
         <arg name="y_pos" value="2.0"/>
         <arg name="z_pos" value="0.0"/>
     </include>
+
+    <!--    Rviz - red team-->
+    <group if="$(arg visualize_red1)">
+         <include file="$(find p_g11_bringup)/config/visualize_red1.launch"/>
+    </group>>
+
+    <group if="$(arg visualize_red2)">
+         <include file="$(find p_g11_bringup)/config/visualize_red2.launch"/>
+    </group>>
+
+    <group if="$(arg visualize_red3)">
+         <include file="$(find p_g11_bringup)/config/visualize_red3.launch"/>
+    </group>>
+
+<!--    Rviz - blue team-->
+    <group if="$(arg visualize_blue1)">
+         <include file="$(find p_g11_bringup)/config/visualize_blue1.launch"/>
+    </group>>
+
+    <group if="$(arg visualize_blue2)">
+         <include file="$(find p_g11_bringup)/config/visualize_blue2.launch"/>
+    </group>>
+
+    <group if="$(arg visualize_blue3)">
+         <include file="$(find p_g11_bringup)/config/visualize_blue3.launch"/>
+    </group>>
+
+    <!--    Rviz - green team-->
+    <group if="$(arg visualize_green1)">
+         <include file="$(find p_g11_bringup)/config/visualize_green1.launch"/>
+    </group>>
+
+    <group if="$(arg visualize_green2)">
+         <include file="$(find p_g11_bringup)/config/visualize_green2.launch"/>
+    </group>>
+
+    <group if="$(arg visualize_green3)">
+         <include file="$(find p_g11_bringup)/config/visualize_green3.launch"/>
+    </group>>
 
 </launch>
