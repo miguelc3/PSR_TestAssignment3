@@ -20,15 +20,15 @@
         <arg name="player_color" value="Red"/>
         <arg name="x_pos" value="1.0"/>
         <arg name="y_pos" value="-2.0"/>
-        <arg name="z_pos" value="0.0"/>
+        <arg name="z_pos" value="1.0"/>
     </include>
 
     <include file="$(find p_g11_bringup)/launch/bringup.launch">
         <arg name="player_name" value="red2"/>
         <arg name="player_color" value="Red"/>
-        <arg name="x_pos" value="6.0"/>
+        <arg name="x_pos" value="6.5"/>
         <arg name="y_pos" value="4.0"/>
-        <arg name="z_pos" value="0.0"/>
+        <arg name="z_pos" value="1.0"/>
     </include>
 
     <include file="$(find p_g11_bringup)/launch/bringup.launch">
@@ -36,32 +36,32 @@
         <arg name="player_color" value="Red"/>
         <arg name="x_pos" value="-8.0"/>
         <arg name="y_pos" value="4.0"/>
-        <arg name="z_pos" value="0.0"/>
+        <arg name="z_pos" value="1.0"/>
     </include>
 
     <!--    GREEN TEAM-->
     <include file="$(find p_g11_bringup)/launch/bringup.launch">
         <arg name="player_name" value="green1"/>
         <arg name="player_color" value="Green"/>
-        <arg name="x_pos" value="6.0"/>
+        <arg name="x_pos" value="6.5"/>
         <arg name="y_pos" value="-1.0"/>
-        <arg name="z_pos" value="0.0"/>
+        <arg name="z_pos" value="1.0"/>
     </include>
 
     <include file="$(find p_g11_bringup)/launch/bringup.launch">
         <arg name="player_name" value="green2"/>
         <arg name="player_color" value="Green"/>
-        <arg name="x_pos" value="-3.0"/>
-        <arg name="y_pos" value="0.0"/>
-        <arg name="z_pos" value="0.0"/>
+        <arg name="x_pos" value="-2.5"/>
+        <arg name="y_pos" value="-1.0"/>
+        <arg name="z_pos" value="1.0"/>
     </include>
 
     <include file="$(find p_g11_bringup)/launch/bringup.launch">
         <arg name="player_name" value="green3"/>
         <arg name="player_color" value="Green"/>
         <arg name="x_pos" value="0"/>
-        <arg name="y_pos" value="2.5"/>
-        <arg name="z_pos" value="0.0"/>
+        <arg name="y_pos" value="2.8"/>
+        <arg name="z_pos" value="1.0"/>
     </include>
 
     <!--    BLUE TEAM-->
@@ -69,16 +69,16 @@
         <arg name="player_name" value="blue1"/>
         <arg name="player_color" value="Blue"/>
         <arg name="x_pos" value="3.0"/>
-        <arg name="y_pos" value="3.0"/>
-        <arg name="z_pos" value="0.0"/>
+        <arg name="y_pos" value="2.0"/>
+        <arg name="z_pos" value="1.0"/>
     </include>
 
     <include file="$(find p_g11_bringup)/launch/bringup.launch">
         <arg name="player_name" value="blue2"/>
         <arg name="player_color" value="Blue"/>
-        <arg name="x_pos" value="-6.0"/>
-        <arg name="y_pos" value="-2.0"/>
-        <arg name="z_pos" value="0.0"/>
+        <arg name="x_pos" value="-7.0"/>
+        <arg name="y_pos" value="-1.5"/>
+        <arg name="z_pos" value="1.0"/>
     </include>
 
     <include file="$(find p_g11_bringup)/launch/bringup.launch">
@@ -86,7 +86,7 @@
         <arg name="player_color" value="Blue"/>
         <arg name="x_pos" value="-4.0"/>
         <arg name="y_pos" value="2.0"/>
-        <arg name="z_pos" value="0.0"/>
+        <arg name="z_pos" value="1.0"/>
     </include>
 
     <!--    Rviz - red team-->
