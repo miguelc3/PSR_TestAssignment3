@@ -114,6 +114,7 @@ class CamImg():
                                       (self.green_limits['B']['max'], self.green_limits['G']['max'],
                                        self.green_limits['R']['max']))
 
+        #Hunt mode
         if self.my_team == 'red':
             self.mask_hunt = self.green_mask
         elif self.my_team == 'green':
@@ -122,7 +123,17 @@ class CamImg():
             self.mask_hunt = self.red_mask
 
         self.lergest_object(self.mask_hunt)
-        # self.show_image(self.mask_hunt, 'Mask hunt')
+        
+        #Run away mode
+        if self.my_team == 'red':
+            self.mask_run = self.blue_mask
+        elif self.my_team == 'green':
+            self.mask_run = self.red_mask
+        elif self.my_team == 'blue':
+            self.mask_run = self.green_mask
+
+        self.lergest_object(self.mask_run)
+        
 
     def lergest_object(self, mask):
         # Initialize the the window of the largest object -> all black
@@ -158,22 +169,41 @@ class CamImg():
     def send_command_callback(self, event):
 
         # print('Sending twist command')
+        
+        #Hunting
+        if self.name in self.hunter_team_players:
+            if not self.goal_active:
+                # speed = 0
+                # angular vel = 0.5 -> look for preys
+                self.speed = 0.5
+                self.angle = 0.5
+            else:
+                self.drive_straight()
 
-        if not self.goal_active:
-            # speed = 0
-            # angular vel = 0.5 -> look for preys
-            self.speed = 0.5
-            self.angle = 0.5
+            # Build the Twist message
+            twist = Twist()
+            twist.linear.x = self.speed
+            twist.angular.z = self.angle
+
+            # Publish twist message
+            self.publisher_command.publish(twist)
         else:
-            self.drive_straight()
+        #Running
+            if not self.goal_active:
+                # speed = 0
+                # angular vel = 0.5 -> look for preys
+                self.speed = 0.5
+                self.angle = 0.5
+            else:
+                self.drive_straight_run()
 
-        # Build the Twist message
-        twist = Twist()
-        twist.linear.x = self.speed
-        twist.angular.z = self.angle
+            # Build the Twist message
+            twist = Twist()
+            twist.linear.x = self.speed
+            twist.angular.z = self.angle
 
-        # Publish twist message
-        self.publisher_command.publish(twist)
+            # Publish twist message
+            self.publisher_command.publish(twist)
 
     def drive_straight(self):
 
@@ -202,7 +232,35 @@ class CamImg():
 
         print('I am ' + self.name + '. Centroid is at = ' + str(self.cx) + ', width = ' + str(width) + ' and center = '
               + str(center) + ' so I ' + objective + ' with angular velocity = ' + str(self.angle))
+    
+    def drive_straight_run(self):
 
+        width = self.mask_largest.shape[1]
+        center = round(width/2)
+
+        if self.cx < center:
+            objective = 'need to turn right'
+        else:
+            objective = 'need to turn left'
+
+        # Define angle
+        if self.cx < center/2:
+            self.angle = -1
+        elif self.cx < center:
+            self.angle = -0.5
+        elif self.cx == center:
+            self.angle = 1
+        elif self.cx > 0.75*width:
+            self.angle = 1
+        else:
+            self.angle = 0.5
+
+        # Define speed - constant
+        self.speed = 1
+
+        print('I am ' + self.name + '. Centroid is at = ' + str(self.cx) + ', width = ' + str(width) + ' and center = '
+              + str(center) + ' so I ' + objective + ' with angular velocity = ' + str(self.angle))
+    
 
 # =============================
 # Main function
