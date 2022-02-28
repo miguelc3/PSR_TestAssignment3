@@ -43,6 +43,7 @@ class Driver():
 
         self.goal_subscriber = rospy.Subscriber('/move_base_simple/goal', PoseStamped, self.goalReceivedCallback)
 
+        self.finding_goal = True
         self.colision_active = False
         self.colision_subscriber = rospy.Subscriber('/p_g11/scan', LaserScan, self.callbackMessageReceived)
 
@@ -52,13 +53,15 @@ class Driver():
 
         target_frame = self.name + '/odom'
 
-        if not self.colision_active:
+        if self.finding_goal:
             try:
                 self.goal = self.tf_buffer.transform(msg, target_frame, rospy.Duration(1))
                 self.goal_active = True
+                self.finding_goal = False
                 rospy.logwarn('Setting new goal')
             except(tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
                 self.goal_active = False
+                self.finding_goal = True
                 rospy.logerr(
                     'Could not transform goal from ' + msg.header.frame_id + ' to ' + target_frame + '. Will ignore this goal')
 
@@ -92,6 +95,8 @@ class Driver():
 
         print('Sending twist command')
         print(self.goal_active)
+        print(self.finding_goal)
+        print(self.colision_active)
 
         if not self.colision_active:
             # Decision outputs a speed (linear velocity) and an angle
@@ -141,13 +146,14 @@ class Driver():
         #         self.angle = -self.angle
         time_avoid = 20
         thresh = 0.8
-        thresh2 = 1.2
+        thresh2 = 5
 
         for i, range in enumerate(msg.ranges):
             theta = msg.angle_min + msg.angle_increment * i
             if range < thresh:
                 t = time()
                 self.goal_active = False
+                self.finding_goal = False
                 self.colision_active = True
 
                 if msg.ranges[0] < thresh:
@@ -162,39 +168,19 @@ class Driver():
                 elif msg.ranges[330] < thresh:
                     self.speed = 0.3
                     self.angle = 0.5
-            else:
-                t = 0
+            # else:
+            #     t = 0
+            # elif range > thresh2:
+            #     self.colision_active = False
+            #     self.finding_goal = True
+
 
             # if t > time_avoid:
-            #     #self.colision_active = False
-            #     self.speed = 5
+            #     self.colision_active = False
+            #     self.speed = 0
             #     self.angle = 0
 
-        # for i, range in enumerate(msg.ranges):
-        #     theta = msg.angle_min + msg.angle_increment * i
-        #     if range < thresh:
-        #         t = time()
-        #         self.goal_active = False
-        #         self.colision_active = True
-        #
-        #         if range[0] < thresh:
-        #             self.speed = -0.3
-        #             self.angle = 0
-        #         if range[180] < thresh:
-        #             self.speed = 0.3
-        #             self.angle = 0
-        #         if range[30] < thresh:
-        #             self.speed = 0.3
-        #             self.angle = -0.5
-        #         if range[330] < thresh:
-        #             self.speed = 0.3
-        #             self.angle = 0.5
 
-                # while t < time_avoid:
-                #     self.speed = 0.2
-                #     self.angle = -theta
-            # else:
-            #     self.colision_active = False
 
 
 def main():
