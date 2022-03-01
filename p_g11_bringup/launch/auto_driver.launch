@@ -1,6 +1,6 @@
 <launch>
 
-    <arg name="driver_file" default="camera_backup.py"/>
+    <arg name="driver_file" default="camera_lidar.py"/>
 
       <node pkg="p_g11_core" type="$(arg driver_file)" name="green1" output="screen">
           <remap from="/cmd_vel" to="/green1/cmd_vel"/>

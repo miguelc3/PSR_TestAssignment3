@@ -4,9 +4,13 @@
         <arg name="x_pos" default="-3.0"/>
         <arg name="y_pos" default="1.0"/>
         <arg name="z_pos" default="0.0"/>
+        <arg name="roll" default="0"/>
+        <arg name="pitch" default="0"/>
+        <arg name="yaw" default="3.1415"/>
 
         <!--  Bloco 4 - Spawning (criação instantanea) do robot definido pela descrição anteriormente carregada para o
         robot_description, para uma posição especifica da cena-->
-        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg player_name) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg player_name) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos)
+        -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -param robot_description" />
 
 </launch>

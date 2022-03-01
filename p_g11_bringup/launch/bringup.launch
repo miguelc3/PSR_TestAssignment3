@@ -8,6 +8,9 @@
      <arg name="x_pos" default="-0.5"/>
      <arg name="y_pos" default="-1.0"/>
      <arg name="z_pos" default="0.0"/>
+     <arg name="roll" default="0"/>
+    <arg name="pitch" default="0"/>
+    <arg name="yaw" default="3.1415"/>
 
      <group ns="$(arg player_name)">
 
@@ -23,6 +26,9 @@
             <arg name="x_pos" value="$(arg x_pos)"/>
             <arg name="y_pos" value="$(arg y_pos)"/>
             <arg name="z_pos" value="$(arg z_pos)"/>
+            <arg name="roll" value="$(arg roll)"/>
+            <arg name="pitch" value="$(arg pitch)"/>
+            <arg name="yaw" value="$(arg yaw)"/>
         </include>
 
         <!--    Include rviz visualization-->

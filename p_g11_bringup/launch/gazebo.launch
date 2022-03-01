@@ -7,9 +7,9 @@
     <!--    Race-->
 <!--    <arg name="world_name" value="$(find p_g11_description)/worlds/fnr.world"/>-->
 <!--    Arena-->
-<!--    <arg name="world_name" value="$(find p_g11_description)/worlds/th_arena_1.world"/>-->
+    <arg name="world_name" value="$(find p_g11_description)/worlds/th_arena_1.world"/>
 <!--    <arg name="world_name" value="$(find p_g11_description)/worlds/th_arena_2.world"/>-->
-    <arg name="world_name" value="$(find p_g11_description)/worlds/th_arena_3.world"/>
+<!--    <arg name="world_name" value="$(find p_g11_description)/worlds/th_arena_3.world"/>-->
 
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
