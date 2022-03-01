@@ -42,6 +42,7 @@ class Driver():
 
         target_frame = self.name + '/odom'
 
+        # Receiving a goal to move the robot
         try:
             self.goal = self.tf_buffer.transform(msg, target_frame, rospy.Duration(1))
             self.goal_active = True
@@ -70,6 +71,7 @@ class Driver():
         x = goal_in_base_link.pose.position.x
         y = goal_in_base_link.pose.position.y
 
+        # Defining the angle to go to reach the goal
         self.angle = math.atan2(y, x)
         distance_to_goal = math.sqrt(x ** 2 + y ** 2)
 

@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Map1
       Splitter Ratio: 0.5
     Tree Height: 227
   - Class: rviz/Selection
@@ -182,6 +183,8 @@ Visualization Manager:
           Value: true
         p_g11/imu_link:
           Value: true
+        p_g11/map:
+          Value: true
         p_g11/odom:
           Value: true
         p_g11/wheel_left_link:
@@ -195,28 +198,29 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        p_g11/odom:
-          p_g11/base_footprint:
-            p_g11/base_link:
-              p_g11/base_scan:
-                {}
-              p_g11/camera_link:
-                p_g11/camera_depth_frame:
-                  p_g11/camera_depth_optical_frame:
-                    {}
-                p_g11/camera_rgb_frame:
-                  p_g11/camera_rgb_optical_frame:
-                    {}
-              p_g11/caster_back_left_link:
-                {}
-              p_g11/caster_back_right_link:
-                {}
-              p_g11/imu_link:
-                {}
-              p_g11/wheel_left_link:
-                {}
-              p_g11/wheel_right_link:
-                {}
+        p_g11/map:
+          p_g11/odom:
+            p_g11/base_footprint:
+              p_g11/base_link:
+                p_g11/base_scan:
+                  {}
+                p_g11/camera_link:
+                  p_g11/camera_depth_frame:
+                    p_g11/camera_depth_optical_frame:
+                      {}
+                  p_g11/camera_rgb_frame:
+                    p_g11/camera_rgb_optical_frame:
+                      {}
+                p_g11/caster_back_left_link:
+                  {}
+                p_g11/caster_back_right_link:
+                  {}
+                p_g11/imu_link:
+                  {}
+                p_g11/wheel_left_link:
+                  {}
+                p_g11/wheel_right_link:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -246,7 +250,7 @@ Visualization Manager:
       Draw Behind: false
       Enabled: true
       Name: Map
-      Topic: /map
+      Topic: /p_g11/map
       Unreliable: false
       Use Timestamp: false
       Value: true

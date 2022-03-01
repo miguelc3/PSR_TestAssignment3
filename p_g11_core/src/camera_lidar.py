@@ -270,15 +270,18 @@ class CamImg:
     def callbackLaserReceived(self, laser):
         rospy.loginfo('Received laser scan message')
 
+        # Constants to define the distance from a wall
         time_avoid = 20
         thresh = 0.8
-        thresh2 = 5
+        thresh2 = 3
 
+        # Checking the message received by the laserscan
         for i, range in enumerate(laser.ranges):
             theta = laser.angle_min + laser.angle_increment * i
+            #  Checking all the angles to see if it's close to a wall
             if range < thresh:
                 t = time()
-                self.goal_active = False
+                #self.goal_active = False
                 # self.finding_goal = False
                 self.colision_active = True
 

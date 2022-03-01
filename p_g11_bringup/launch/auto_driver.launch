@@ -1,38 +1,38 @@
 <launch>
 
-      <node pkg="p_g11_core" type="camera.py" name="green1" output="screen">
+      <node pkg="p_g11_core" type="camera_lidar.py" name="green1" output="screen">
           <remap from="/cmd_vel" to="/green1/cmd_vel"/>
       </node>
 
-      <node pkg="p_g11_core" type="camera.py" name="green2" output="screen">
+      <node pkg="p_g11_core" type="camera_lidar.py" name="green2" output="screen">
           <remap from="/cmd_vel" to="/green2/cmd_vel"/>
       </node>
 
-      <node pkg="p_g11_core" type="camera.py" name="green3" output="screen">
+      <node pkg="p_g11_core" type="camera_lidar.py" name="green3" output="screen">
           <remap from="/cmd_vel" to="/green3/cmd_vel"/>
       </node>
 
-      <node pkg="p_g11_core" type="camera.py" name="red1" output="screen">
+      <node pkg="p_g11_core" type="camera_lidar.py" name="red1" output="screen">
           <remap from="/cmd_vel" to="/red1/cmd_vel"/>
       </node>
 
-      <node pkg="p_g11_core" type="camera.py" name="red2" output="screen">
+      <node pkg="p_g11_core" type="camera_lidar.py" name="red2" output="screen">
           <remap from="/cmd_vel" to="/red2/cmd_vel"/>
       </node>
 
-      <node pkg="p_g11_core" type="camera.py" name="red3" output="screen">
+      <node pkg="p_g11_core" type="camera_lidar.py" name="red3" output="screen">
           <remap from="/cmd_vel" to="/red3/cmd_vel"/>
       </node>
 
-      <node pkg="p_g11_core" type="camera.py" name="blue1" output="screen">
+      <node pkg="p_g11_core" type="camera_lidar.py" name="blue1" output="screen">
           <remap from="/cmd_vel" to="/blue1/cmd_vel"/>
       </node>
 
-      <node pkg="p_g11_core" type="camera.py" name="blue2" output="screen">
+      <node pkg="p_g11_core" type="camera_lidar.py" name="blue2" output="screen">
           <remap from="/cmd_vel" to="/blue2/cmd_vel"/>
       </node>
 
-      <node pkg="p_g11_core" type="camera.py" name="blue3" output="screen">
+      <node pkg="p_g11_core" type="camera_lidar.py" name="blue3" output="screen">
           <remap from="/cmd_vel" to="/blue3/cmd_vel"/>
       </node>
 

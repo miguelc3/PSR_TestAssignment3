@@ -117,6 +117,7 @@ if __name__ == "__main__":
     control_linear_vel = 0.0
     control_angular_vel = 0.0
 
+    # Defining what key is pressed and what is the function of the pressed key
     try:
         print(msg)
         while True:
