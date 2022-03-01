@@ -28,12 +28,21 @@ You can see one of these robots in rviz by typing the following code instead:<br
 <code>roslaunch p_g11_bringup game_bringup.launch visualize:=red1</code><br><br>
 
 
-## 
+## Starting the game
+Starting the game means you have to put the robots in automatic mode, for that just insert the code:<br>
+<code>roslaunch p_g11_bringup auto_driver.launch</code><br><br>
 
 
-# command for gmapping
-rosrun gmapping slam_gmapping scan:=p_g11/scan _base_frame:=/p_g11/base_link _map_frame:=/p_g11/map _odom_frame:=/p_g11/odom
+## GMapping
+GMapping allow for data collection from the LIDAR sensor of our robot and form a map out of that.
+If you want to see the results just use:<br>
+<code>rosrun gmapping slam_gmapping scan:=p_g11/scan _base_frame:=/p_g11/base_link _map_frame:=/p_g11/map _odom_frame:=/p_g11/odom<code><br>
 
+
+## Referee
+There couldn't be a game without a referee, so there is node provided by our teacher which evaluates multiple parameters of the game like for example, if a player gets caught, and gives/takes points accordingly.
+To run this program just run this command:<br>
+<code>rosrun th_referee th_referee<code><br>
 
 
 ## Contributors
