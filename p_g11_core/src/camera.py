@@ -69,6 +69,7 @@ class CamImg():
             rospy.logerr('Something is wrong, I\'m not on the player\'s list')
             exit(0)
 
+
         # print('My name is ' + self.name + '. I am team ' + self.my_team + ', I am hunting  ' +
         #       str(self.prey_team_players) + ' and fleeing from ' + str(self.hunter_team_players))
 
@@ -170,8 +171,10 @@ class CamImg():
 
         # print('Sending twist command')
         
-        #Hunting
+        # Hunting
         if self.name in self.hunter_team_players:
+            print(self.name + 'is in' + self.hunter_team_players)
+
             if not self.goal_active:
                 # speed = 0
                 # angular vel = 0.5 -> look for preys
@@ -188,7 +191,7 @@ class CamImg():
             # Publish twist message
             self.publisher_command.publish(twist)
         else:
-        #Running
+        # Running
             if not self.goal_active:
                 # speed = 0
                 # angular vel = 0.5 -> look for preys
@@ -267,7 +270,7 @@ class CamImg():
 # =============================
 def main():
 
-    name = rospy.init_node('p_mpereira', anonymous=False)
+    name = rospy.init_node('p_g11', anonymous=False)
     camImg = CamImg()
     while not rospy.is_shutdown():
         rospy.spin()

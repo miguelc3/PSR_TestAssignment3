@@ -45,7 +45,7 @@ class Driver():
 
         self.finding_goal = True
         self.colision_active = False
-        self.colision_subscriber = rospy.Subscriber('/' + self.name + '/scan', LaserScan, self.callbackMessageReceived)
+        self.colision_subscriber = rospy.Subscriber('/p_g11/scan', LaserScan, self.callbackMessageReceived)
 
     def goalReceivedCallback(self, msg):
 
@@ -53,21 +53,21 @@ class Driver():
 
         target_frame = self.name + '/odom'
 
-        #if self.finding_goal:
-        try:
-            self.goal = self.tf_buffer.transform(msg, target_frame, rospy.Duration(1))
-            self.goal_active = True
-            self.finding_goal = False
-            rospy.logwarn('Setting new goal')
-        except(tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-            self.goal_active = False
-            self.finding_goal = True
-            rospy.logerr(
+        if self.finding_goal:
+            try:
+                self.goal = self.tf_buffer.transform(msg, target_frame, rospy.Duration(1))
+                self.goal_active = True
+                self.finding_goal = False
+                rospy.logwarn('Setting new goal')
+            except(tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+                self.goal_active = False
+                self.finding_goal = True
+                rospy.logerr(
                     'Could not transform goal from ' + msg.header.frame_id + ' to ' + target_frame + '. Will ignore this goal')
 
-        print('Received new goal')
+        # print('Received new goal')
         # self.goal = copy.copy(msg)  # Store goal
-        self.goal_active = True
+        # self.goal_active = True
 
     def driveSraight(self, min_speed=0.2, max_speed=0.5):
 
@@ -94,9 +94,9 @@ class Driver():
     def sendCommandCallback(self, event):
 
         print('Sending twist command')
-        # print(self.goal_active)
-        # print(self.finding_goal)
-        # print(self.colision_active)
+        print(self.goal_active)
+        print(self.finding_goal)
+        print(self.colision_active)
 
         if not self.colision_active:
             # Decision outputs a speed (linear velocity) and an angle
@@ -117,18 +117,42 @@ class Driver():
     def callbackMessageReceived(self, msg):
         rospy.loginfo('Received laser scan message')
 
-        # Constants to define the distance from a wall
+        # TRANSFORM TO POINTCLOUD (x, y, z)
+        #
+        # header = std_msgs.msg.Header(seq=msg.header.seq, stamp=msg.header.stamp, frame_id=msg.header.frame_id)
+        # fields = [PointField('x', 0, PointField.FLOAT32, 1),
+        #           PointField('y', 4, PointField.FLOAT32, 1),
+        #           PointField('z', 8, PointField.FLOAT32, 1)]
+        #
+        # # convert from polar coordinates to cartesian and fill the point cloud
+        # points = []
+        # z = 0
+        # for idx, range in enumerate(msg.ranges):
+        #     theta = msg.angle_min + msg.angle_increment * idx
+        #     x = range * math.cos(theta)
+        #     y = range * math.sin(theta)
+        #     points.append([x, y, z])
+        #
+        # pc2 = point_cloud2.create_cloud(header, fields, points)  # create point_cloud2 data structure
+        # publisher.publish(pc2)  # publish (will automatically convert from point_cloud2 to Pointcloud2 message)
+        # rospy.loginfo('Published PointCloud2 msg')
+        #
+        # for idx, point in enumerate(points):
+        #     dist = math.sqrt(point[1] ** 2 + point[2] ** 2)
+        #     if dist > 0.1:
+        #         self.goal_active = False
+        #         self.colision_active = True
+        #         self.speed = self.speed/2
+        #         self.angle = -self.angle
         time_avoid = 20
         thresh = 0.8
         thresh2 = 5
 
-        # Checking the message received by the laserscan
         for i, range in enumerate(msg.ranges):
             theta = msg.angle_min + msg.angle_increment * i
-            #  Checking all the angles to see if it's close to a wall
             if range < thresh:
                 t = time()
-                #self.goal_active = False
+                self.goal_active = False
                 self.finding_goal = False
                 self.colision_active = True
 
@@ -146,17 +170,15 @@ class Driver():
                     self.angle = 0.5
             # else:
             #     t = 0
+            # elif range > thresh2:
+            #     self.colision_active = False
+            #     self.finding_goal = True
 
-            elif range > thresh2:
-                self.colision_active = False
-                self.finding_goal = True
 
             # if t > time_avoid:
             #     self.colision_active = False
             #     self.speed = 0
             #     self.angle = 0
-
-
 
 
 def main():
