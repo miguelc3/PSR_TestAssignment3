@@ -40,7 +40,7 @@ If you want to see the results just use:<br>
 
 
 ## Referee
-There couldn't be a game without a referee, so there is node provided by our teacher which evaluates multiple parameters of the game like for example, if a player gets caught, and gives/takes points accordingly.
+There couldn't be a game without a referee, so there is node provided by our teacher which evaluates multiple parameters of the game like for example, if a player gets caught, and gives/takes points accordingly.<br>
 To run this program just run this command:<br>
 <code>rosrun th_referee th_referee<code><br><br>
 
