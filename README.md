@@ -34,7 +34,7 @@ Starting the game means you have to put the robots in automatic mode, for that j
 
 
 ## GMapping
-GMapping allow for data collection from the LIDAR sensor of our robot and form a map out of that.
+GMapping allow for data collection from the LIDAR sensor of our robot and form a map out of that.<br>
 If you want to see the results just use:<br>
 <code>rosrun gmapping slam_gmapping scan:=p_g11/scan _base_frame:=/p_g11/base_link _map_frame:=/p_g11/map _odom_frame:=/p_g11/odom<code><br><br>
 
