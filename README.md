@@ -1,9 +1,5 @@
 # Team Hunt - PSR 2021/2022
 
-## Index
-Generate Index
-
-
 ## Constitution of the Repository
 This repository has three packages: <br>
 - p_g11_bringup - This is responsible for launching the other files, because it has all the launch files necessary to run this program;
@@ -27,16 +23,33 @@ This will spawn in the gazebo world 3 robots for each team (red, green and blue)
 You can see one of these robots in rviz by typing the following code instead:<br>
 <code>roslaunch p_g11_bringup game_bringup.launch visualize:=red1</code><br><br>
 
+## Manual Driving
+After spawning just one robot you it's possible to drive it manualy by running the following command:<br>
+<code>roslaunch p_g11_bringup myteleop.launch</code><br><br>
+After this you can drive the robot with the keys shown in this table:
 
-## Starting the game
-Starting the game means you have to put the robots in automatic mode, for that just insert the code:<br>
-<code>roslaunch p_g11_bringup auto_driver.launch</code><br><br>
-
+| Key         | Action                          |
+| ----------- | -----------                     |
+| w           | Increase the speed              |
+| x           | Decrease the speed              |
+| a           | Turn Left                       |
+| d           | Turn Right                      |
+| s           | Stop Turning                    |
+| space       | Stop moving the robot           |
+| q           | Exit the program                |
 
 ## GMapping
 GMapping allow for data collection from the LIDAR sensor of our robot and form a map out of that.<br>
 If you want to see the results just use:<br>
 <code>rosrun gmapping slam_gmapping scan:=p_g11/scan _base_frame:=/p_g11/base_link _map_frame:=/p_g11/map _odom_frame:=/p_g11/odom</code><br><br>
+
+## Team Hunt Game
+
+### Starting the game
+Starting the game means you have to put the robots in automatic mode, for that just insert the code:<br>
+<code>roslaunch p_g11_bringup auto_driver.launch</code><br><br>
+
+
 
 
 ## Referee

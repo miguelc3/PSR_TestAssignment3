@@ -38,6 +38,8 @@ class CamImg:
         self.goal_active = False
         self.hunting = False
         self.running = False
+        self.h = False
+        self.r = False
         self.angle = 0
         self.speed = 0
         self.cy = 0
@@ -226,8 +228,8 @@ class CamImg:
                 else:
                     self.drive_straight_run()
 
-        elif self.collision_active:
-            self.callbackLaserReceived()
+        # elif self.collision_active:
+        #     self.callbackLaserReceived()
 
         # Build the Twist message
         twist = Twist()
@@ -295,8 +297,8 @@ class CamImg:
 
     def callbackLaserReceived(self, laser):
         # Function to avoid going into the walls
-        h = False
-        r = False
+        # h = False
+        # r = False
 
         rospy.loginfo('Received laser scan message')
 
@@ -311,12 +313,12 @@ class CamImg:
             if range < thresh:
                 t = time()
                 self.collision_active = True
-                if self.hunting:
-                    h = True
-                    self.hunting = False
-                elif self.running:
-                    r = True
-                    self.running = False
+                # if self.hunting:
+                #     self.h = True
+                #     self.hunting = False
+                # elif self.running:
+                #     self.r = True
+                #     self.running = False
 
                 if laser.ranges[0] < thresh:
                     self.speed = -0.3
@@ -335,12 +337,12 @@ class CamImg:
             elif range > thresh2:
                 self.collision_active = False
 
-                if h:
-                    self.hunting = True
-                    h = False
-                elif r:
-                    self.running = True
-                    r = False
+                # if self.h:
+                #     self.hunting = True
+                #     h = False
+                # elif self.r:
+                #     self.running = True
+                #     r = False
 
 
 # =============================
