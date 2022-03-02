@@ -15,7 +15,7 @@ from time import time
 import subprocess
 
 
-class CamImg():
+class CamImg:
 
     def __init__(self):
 
@@ -24,10 +24,22 @@ class CamImg():
         self.name = self.name.strip('/')
         # print('My name is ' + self.name)
 
+        # Subscribe the camera topic
+        self.sub_image = rospy.Subscriber(self.name + "/camera/rgb/image_raw", Image, self.image_callback)
+
+        # Create a publisher make the robot move
+        self.publisher_command = rospy.Publisher('/' + self.name + '/cmd_vel', Twist, queue_size=1)
+        self.tf_buffer = tf2_ros.Buffer()
+        self.listener = tf2_ros.TransformListener(self.tf_buffer)
+        self.timer = rospy.Timer(rospy.Duration(0.05), self.send_command_callback)
+
+        # Set initial variables
         self.bridge = CvBridge()
         self.goal_active = False
         self.hunting = False
         self.running = False
+        self.h = False
+        self.r = False
         self.angle = 0
         self.speed = 0
         self.cy = 0
@@ -216,8 +228,8 @@ class CamImg():
                 else:
                     self.drive_straight_run()
 
-        elif self.collision_active:
-            self.callbackLaserReceived()
+        # elif self.collision_active:
+        #     self.callbackLaserReceived()
 
         # Build the Twist message
         twist = Twist()
@@ -285,15 +297,14 @@ class CamImg():
 
     def callbackLaserReceived(self, laser):
         # Function to avoid going into the walls
-        h = False
-        r = False
+        # h = False
+        # r = False
 
         rospy.loginfo('Received laser scan message')
 
         # Constants to define the distance from a wall
         thresh = 0.5
         thresh2 = 3
-
 
         angle = laser.angle_min
 
@@ -302,22 +313,28 @@ class CamImg():
         for i, range in enumerate(laser.ranges):
             angle += laser.angle_increment*i
             if range < thresh:
+                self.collision_active = True
                 self.speed = 0.2
                 self.angle = -angle
+            elif range > thresh2:
+                self.collision_active = False
+            elif angle == 0:
+                self.speed = 0.2
+                self.angle = 2
             
-        # Checking the message received by the laserscan
+        # # Checking the message received by the laserscan
         # for i, range in enumerate(laser.ranges):
         #     theta = laser.angle_min + laser.angle_increment * i
         #     #  Checking all the angles to see if it's close to a wall
         #     if range < thresh:
         #         t = time()
         #         self.collision_active = True
-        #         if self.hunting:
-        #             h = True
-        #             self.hunting = False
-        #         elif self.running:
-        #             r = True
-        #             self.running = False
+        #         # if self.hunting:
+        #         #     self.h = True
+        #         #     self.hunting = False
+        #         # elif self.running:
+        #         #     self.r = True
+        #         #     self.running = False
 
         #         if laser.ranges[0] < thresh:
         #             self.speed = -0.3
@@ -336,12 +353,12 @@ class CamImg():
         #     elif range > thresh2:
         #         self.collision_active = False
 
-        #         if h:
-        #             self.hunting = True
-        #             h = False
-        #         elif r:
-        #             self.running = True
-        #             r = False
+        #         # if self.h:
+        #         #     self.hunting = True
+        #         #     h = False
+        #         # elif self.r:
+        #         #     self.running = True
+        #         #     r = False
 
 
 # =============================
