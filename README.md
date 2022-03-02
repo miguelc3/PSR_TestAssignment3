@@ -1,5 +1,14 @@
 # Team Hunt - PSR 2021/2022
 
+## The game
+This project consists of two basic modes: <br>
+- Manual mode
+- Automatic mode (Team Hunt)
+
+Manual mode allows you to drive the robot using your own keyboard (just don't expect it to be like Gran Turismo). This also includes a visualization of what the robot is detecting (camera, laser), using RVIZ.<br>
+
+Automatic mode or Team Hunt is a game where 1 team out of 3 chases the others and tries to touch them. The game works by score losing points or winning points accordingly with the team you represent and if you catch or get caught. <br>
+
 ## Constitution of the Repository
 This repository has three packages: <br>
 - p_g11_bringup - This is responsible for launching the other files, because it has all the launch files necessary to run this program;
@@ -39,7 +48,7 @@ After this you can drive the robot with the keys shown in this table:
 | q           | Exit the program                |
 
 ## GMapping
-GMapping allow for data collection from the LIDAR sensor of our robot and form a map out of that.<br>
+GMapping allows for data collection from the LIDAR sensor of our robot and form a map out of that.<br>
 If you want to see the results just use:<br>
 <code>rosrun gmapping slam_gmapping scan:=p_g11/scan _base_frame:=/p_g11/base_link _map_frame:=/p_g11/map _odom_frame:=/p_g11/odom</code><br><br>
 
