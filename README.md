@@ -7,7 +7,7 @@ This project consists of two basic modes: <br>
 
 Manual mode allows you to drive the robot using your own keyboard (just don't expect it to be like Gran Turismo). This also includes a visualization of what the robot is detecting (camera, laser), using RVIZ.<br>
 
-Automatic mode or Team Hunt is a game where 1 team out of 3 chases the others and tries to touch them. The game works by score losing points or winning points accordingly with the team you represent and if you catch or get caught. <br>
+Automatic mode or Team Hunt is a game where 1 team out of 3 chases the others and tries to touch them. The game works by score, losing points or winning points, accordingly with the team you represent and if you catch or get caught. <br>
 
 ## Constitution of the Repository
 This repository has three packages: <br>
