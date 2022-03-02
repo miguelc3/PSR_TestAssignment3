@@ -4,12 +4,13 @@
 # Import pkgs
 # =============================
 import rospy
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, LaserScan
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 from geometry_msgs.msg import Twist, PoseStamped
 import tf2_ros
+import subprocess
 
 
 class CamImg():
@@ -36,6 +37,11 @@ class CamImg():
         self.angle = 0
         self.speed = 0
         self.cy = 0
+
+        # lidar
+        # self.finding_goal = True
+        self.collision_active = False
+        self.colision_subscriber = rospy.Subscriber('/' + self.name + '/scan', LaserScan, self.callbackLaserReceived)
 
         # Segment color limits
         self.blue_limits = {'B': {'max': 255, 'min': 100}, 'G': {'max': 50, 'min': 0}, 'R': {'max': 50, 'min': 0}}
@@ -69,6 +75,15 @@ class CamImg():
             rospy.logerr('Something is wrong, I\'m not on the player\'s list')
             exit(0)
 
+        # Create an instance for each player
+        count = 1
+        for player in red_team + green_team + blue_team:
+            # Add gazebo marker text with the name of the player
+            cmd = "gz marker -m 'action: ADD_MODIFY, type: TEXT, id: " + str(count) + \
+                  ", scale: {x:0.3, y:0.3, z:0.3}, text: \"" + player + "\", parent: \"" + player + \
+                  "::base_footprint\", pose: {position: {x:0, y:0, z:0.5}, orientation: {x:0, y:0, z:0, w:1}}'"
+            self.bash(cmd, verbose=True)
+            count += 1
 
         # print('My name is ' + self.name + '. I am team ' + self.my_team + ', I am hunting  ' +
         #       str(self.prey_team_players) + ' and fleeing from ' + str(self.hunter_team_players))
@@ -76,6 +91,15 @@ class CamImg():
     # =============================
     # Functions
     # =============================
+    def bash(self, cmd, blocking=True, verbose=False):
+        if verbose:
+            print("Executing command: " + cmd)
+        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if blocking:
+            for line in p.stdout.readlines():
+                print(line)
+                p.wait()
+
     def show_image(self, img, window_name):
         # rospy.loginfo('Going to show image')
         cv2.namedWindow(window_name, 1)
@@ -115,7 +139,6 @@ class CamImg():
                                       (self.green_limits['B']['max'], self.green_limits['G']['max'],
                                        self.green_limits['R']['max']))
 
-        #Hunt mode
         if self.my_team == 'red':
             self.mask_hunt = self.green_mask
         elif self.my_team == 'green':
@@ -124,17 +147,7 @@ class CamImg():
             self.mask_hunt = self.red_mask
 
         self.lergest_object(self.mask_hunt)
-        
-        #Run away mode
-        if self.my_team == 'red':
-            self.mask_run = self.blue_mask
-        elif self.my_team == 'green':
-            self.mask_run = self.red_mask
-        elif self.my_team == 'blue':
-            self.mask_run = self.green_mask
-
-        self.lergest_object(self.mask_run)
-        
+        # self.show_image(self.mask_hunt, 'Mask hunt')
 
     def lergest_object(self, mask):
         # Initialize the the window of the largest object -> all black
@@ -170,48 +183,28 @@ class CamImg():
     def send_command_callback(self, event):
 
         # print('Sending twist command')
-        
-        # Hunting
-        if self.name in self.hunter_team_players:
-            print(self.name + 'is in' + self.hunter_team_players)
 
+        if not self.collision_active:
             if not self.goal_active:
                 # speed = 0
                 # angular vel = 0.5 -> look for preys
-                self.speed = 0.5
+                self.speed = 0.2
                 self.angle = 0.5
-            else:
+            elif self.goal_active:
                 self.drive_straight()
 
-            # Build the Twist message
-            twist = Twist()
-            twist.linear.x = self.speed
-            twist.angular.z = self.angle
+        # Build the Twist message
+        twist = Twist()
+        twist.linear.x = self.speed
+        twist.angular.z = self.angle
 
-            # Publish twist message
-            self.publisher_command.publish(twist)
-        else:
-        # Running
-            if not self.goal_active:
-                # speed = 0
-                # angular vel = 0.5 -> look for preys
-                self.speed = 0.5
-                self.angle = 0.5
-            else:
-                self.drive_straight_run()
-
-            # Build the Twist message
-            twist = Twist()
-            twist.linear.x = self.speed
-            twist.angular.z = self.angle
-
-            # Publish twist message
-            self.publisher_command.publish(twist)
+        # Publish twist message
+        self.publisher_command.publish(twist)
 
     def drive_straight(self):
 
         width = self.mask_largest.shape[1]
-        center = round(width/2)
+        center = round(width / 2)
 
         if self.cx < center:
             objective = 'need to turn left'
@@ -219,13 +212,13 @@ class CamImg():
             objective = 'need to turn right'
 
         # Define angle
-        if self.cx < center/2:
+        if self.cx < center / 2:
             self.angle = 1
         elif self.cx < center:
             self.angle = 0.5
         elif self.cx == center:
             self.angle = 0
-        elif self.cx > 0.75*width:
+        elif self.cx > 0.75 * width:
             self.angle = -1
         else:
             self.angle = -0.5
@@ -233,43 +226,47 @@ class CamImg():
         # Define speed - constant
         self.speed = 1
 
-        print('I am ' + self.name + '. Centroid is at = ' + str(self.cx) + ', width = ' + str(width) + ' and center = '
-              + str(center) + ' so I ' + objective + ' with angular velocity = ' + str(self.angle))
-    
-    def drive_straight_run(self):
+        # print('I am ' + self.name + '. Centroid is at = ' + str(self.cx) + ', width = ' + str(width) + ' and center = '
+        #       + str(center) + ' so I ' + objective + ' with angular velocity = ' + str(self.angle))
 
-        width = self.mask_largest.shape[1]
-        center = round(width/2)
+    def callbackLaserReceived(self, laser):
+        # Function to avoid going into the walls
+        # h = False
+        # r = False
 
-        if self.cx < center:
-            objective = 'need to turn right'
-        else:
-            objective = 'need to turn left'
+        rospy.loginfo('Received laser scan message')
 
-        # Define angle
-        if self.cx < center/2:
-            self.angle = -1
-        elif self.cx < center:
-            self.angle = -0.5
-        elif self.cx == center:
-            self.angle = 1
-        elif self.cx > 0.75*width:
-            self.angle = 1
-        else:
-            self.angle = 0.5
+        # Constants to define the distance from a wall
+        thresh = 0.5
+        thresh2 = 3
 
-        # Define speed - constant
-        self.speed = 1
+        # Checking the message received by the laserscan
+        for i, range in enumerate(laser.ranges):
+            theta = laser.angle_min + laser.angle_increment * i
+            #  Checking all the angles to see if it's close to a wall
+            if range < thresh and not self.goal_active:
+                self.collision_active = True
 
-        print('I am ' + self.name + '. Centroid is at = ' + str(self.cx) + ', width = ' + str(width) + ' and center = '
-              + str(center) + ' so I ' + objective + ' with angular velocity = ' + str(self.angle))
-    
-
+                if laser.ranges[0] < thresh:
+                    self.speed = -0.3
+                    self.angle = 0
+                elif laser.ranges[180] < thresh:
+                    self.speed = 0.3
+                    self.angle = 0
+                elif laser.ranges[30] < thresh:
+                    self.speed = 0.3
+                    self.angle = -0.5
+                elif laser.ranges[330] < thresh:
+                    self.speed = 0.3
+                    self.angle = 0.5
+            # else:
+            #     t = 0
+            elif range > thresh2:
+                self.collision_active = False
 # =============================
 # Main function
 # =============================
 def main():
-
     name = rospy.init_node('p_g11', anonymous=False)
     camImg = CamImg()
     while not rospy.is_shutdown():

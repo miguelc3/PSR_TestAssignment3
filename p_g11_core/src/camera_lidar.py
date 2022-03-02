@@ -99,8 +99,8 @@ class CamImg:
     # =============================
     def bash(self, cmd, blocking=True, verbose=False):
         # Function to diplay players names
-        if verbose:
-            print("Executing command: " + cmd)
+        #if verbose:
+            #print("Executing command: " + cmd)
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         if blocking:
             for line in p.stdout.readlines():
@@ -172,8 +172,10 @@ class CamImg:
         # Verify if it is running away or hunting
         if state == 'hunting':
             self.hunting = True
+            self.running = False
         elif state == 'running':
             self.running = True
+            self.hunting = False
 
         # Initialize the window of the largest object -> all black
         self.mask_largest = np.zeros(mask.shape, dtype=np.uint8)
@@ -197,11 +199,11 @@ class CamImg:
             self.cx = 0
             cy = 0
 
-        if not self.collision_active:
-            if np.count_nonzero(self.mask_largest) > 0:
-                self.goal_active = True
-            else:
-                self.goal_active = False
+        #if not self.collision_active:
+        if np.count_nonzero(self.mask_largest) > 0:
+            self.goal_active = True
+        else:
+            self.goal_active = False
 
         self.mask_largest = cv2.circle(self.mask_largest, (self.cx, cy), 2, (0, 0, 0), -1)
         # self.show_image(self.mask_largest, 'Mask hunt largest')
@@ -209,27 +211,24 @@ class CamImg:
     def send_command_callback(self, event):
         # print('Sending twist command')
 
-        if not self.collision_active:
-            # Hunting
-            if self.hunting:
-                if not self.goal_active:
-                    # angular vel = 0.5 -> look for preys
-                    self.speed = 0.2
-                    self.angle = 0.5
-                else:
-                    self.drive_straight()
+        #if not self.collision_active:
+        # Hunting
+        if self.hunting:
+            if not self.goal_active:
+                # angular vel = 0.5 -> look for preys
+                self.speed = 0.2
+                self.angle = 0.5
+            else:
+                self.drive_straight()
 
-            elif self.running:
-                # Running
-                if not self.goal_active:
-                    # angular vel = 0.5 -> look for preys
-                    self.speed = 0.2
-                    self.angle = 0.5
-                else:
-                    self.drive_straight_run()
-
-        # elif self.collision_active:
-        #     self.callbackLaserReceived()
+        elif self.running:
+            # Running
+            if not self.goal_active:
+                # angular vel = 0.5 -> look for preys
+                self.speed = 0.2
+                self.angle = 0.5
+            else:
+                self.drive_straight_run()
 
         # Build the Twist message
         twist = Twist()
@@ -262,7 +261,7 @@ class CamImg:
             self.angle = -0.5
 
         # Define speed - constant
-        self.speed = 1
+        self.speed = 0.8
 
         print('I am ' + self.name + '. Centroid is at = ' + str(self.cx) + ', width = ' + str(width) + ' and center = '
               + str(center) + ' so I ' + objective + ' with angular velocity = ' + str(self.angle))
@@ -290,7 +289,7 @@ class CamImg:
             self.angle = 0.5
 
         # Define speed - constant
-        self.speed = 1
+        self.speed = 0.8
 
         print('I am ' + self.name + '. Centroid is at = ' + str(self.cx) + ', width = ' + str(width) + ' and center = '
               + str(center) + ' so I ' + objective + ' with angular velocity = ' + str(self.angle))
@@ -310,15 +309,9 @@ class CamImg:
         for i, range in enumerate(laser.ranges):
             theta = laser.angle_min + laser.angle_increment * i
             #  Checking all the angles to see if it's close to a wall
-            if range < thresh:
+            if range < thresh and not self.goal_active:
                 t = time()
                 self.collision_active = True
-                # if self.hunting:
-                #     self.h = True
-                #     self.hunting = False
-                # elif self.running:
-                #     self.r = True
-                #     self.running = False
 
                 if laser.ranges[0] < thresh:
                     self.speed = -0.3
@@ -336,13 +329,6 @@ class CamImg:
             #     t = 0
             elif range > thresh2:
                 self.collision_active = False
-
-                # if self.h:
-                #     self.hunting = True
-                #     h = False
-                # elif self.r:
-                #     self.running = True
-                #     r = False
 
 
 # =============================

@@ -4,7 +4,7 @@
 # Import pkgs
 # =============================
 import rospy
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, LaserScan
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
@@ -37,6 +37,11 @@ class CamImg():
         self.angle = 0
         self.speed = 0
         self.cy = 0
+
+        # lidar
+        # self.finding_goal = True
+        self.collision_active = False
+        self.colision_subscriber = rospy.Subscriber('/' + self.name + '/scan', LaserScan, self.callbackLaserReceived)
 
         # Segment color limits
         self.blue_limits = {'B': {'max': 255, 'min': 100}, 'G': {'max': 50, 'min': 0}, 'R': {'max': 50, 'min': 0}}
@@ -136,15 +141,28 @@ class CamImg():
 
         if self.my_team == 'red':
             self.mask_hunt = self.green_mask
+            self.mask_run = self.blue_mask
         elif self.my_team == 'green':
             self.mask_hunt = self.blue_mask
+            self.mask_run = self.red_mask
         elif self.my_team == 'blue':
             self.mask_hunt = self.red_mask
+            self.mask_run = self.green_mask
 
-        self.lergest_object(self.mask_hunt)
+        self.largest_object(self.mask_hunt, 'hunting')
+        self.largest_object(self.mask_run, 'running')
         # self.show_image(self.mask_hunt, 'Mask hunt')
 
-    def lergest_object(self, mask):
+    def largest_object(self, mask, state):
+
+        # Verify if it is running away or hunting
+        if state == 'hunting':
+            self.hunting = True
+            self.running = False
+        elif state == 'running':
+            self.running = True
+            self.hunting = False
+
         # Initialize the the window of the largest object -> all black
         self.mask_largest = np.zeros(mask.shape, dtype=np.uint8)
 
@@ -179,13 +197,14 @@ class CamImg():
 
         # print('Sending twist command')
 
-        if not self.goal_active:
-            # speed = 0
-            # angular vel = 0.5 -> look for preys
-            self.speed = 0.5
-            self.angle = 0.5
-        else:
-            self.drive_straight()
+        if not self.collision_active:
+            if not self.goal_active:
+                # speed = 0
+                # angular vel = 0.5 -> look for preys
+                self.speed = 0.2
+                self.angle = 0.5
+            elif self.goal_active:
+                self.drive_straight()
 
         # Build the Twist message
         twist = Twist()
@@ -200,30 +219,82 @@ class CamImg():
         width = self.mask_largest.shape[1]
         center = round(width / 2)
 
-        if self.cx < center:
-            objective = 'need to turn left'
-        else:
-            objective = 'need to turn right'
+        if self.hunting:
+            if self.cx < center:
+                objective = 'need to turn left'
+            else:
+                objective = 'need to turn right'
+        elif self.running:
+            if self.cx > center:
+                objective = 'need to turn left'
+            else:
+                objective = 'need to turn right'
 
-        # Define angle
-        if self.cx < center / 2:
-            self.angle = 1
-        elif self.cx < center:
-            self.angle = 0.5
-        elif self.cx == center:
-            self.angle = 0
-        elif self.cx > 0.75 * width:
-            self.angle = -1
-        else:
-            self.angle = -0.5
+        if self.hunting:
+            # Define angle
+            if self.cx < center / 2:
+                self.angle = 1
+            elif self.cx < center:
+                self.angle = 0.5
+            elif self.cx == center:
+                self.angle = 0
+            elif self.cx > 0.75 * width:
+                self.angle = -1
+            else:
+                self.angle = -0.5
+        elif self.running:
+            # Define angle
+            if self.cx > center / 2:
+                self.angle = 0.5
+            elif self.cx > center:
+                self.angle = 1
+            elif self.cx == center:
+                self.angle = 1
+            elif self.cx < 0.75 * width:
+                self.angle = -0.5
+            else:
+                self.angle = -1
 
         # Define speed - constant
         self.speed = 1
 
-        print('I am ' + self.name + '. Centroid is at = ' + str(self.cx) + ', width = ' + str(width) + ' and center = '
-              + str(center) + ' so I ' + objective + ' with angular velocity = ' + str(self.angle))
+        # print('I am ' + self.name + '. Centroid is at = ' + str(self.cx) + ', width = ' + str(width) + ' and center = '
+        #       + str(center) + ' so I ' + objective + ' with angular velocity = ' + str(self.angle))
 
+    def callbackLaserReceived(self, laser):
+        # Function to avoid going into the walls
+        # h = False
+        # r = False
 
+        rospy.loginfo('Received laser scan message')
+
+        # Constants to define the distance from a wall
+        thresh = 0.5
+        thresh2 = 3
+
+        # Checking the message received by the laserscan
+        for i, range in enumerate(laser.ranges):
+            theta = laser.angle_min + laser.angle_increment * i
+            #  Checking all the angles to see if it's close to a wall
+            if range < thresh and not self.goal_active:
+                self.collision_active = True
+
+                if laser.ranges[0] < thresh:
+                    self.speed = -0.3
+                    self.angle = 0
+                elif laser.ranges[180] < thresh:
+                    self.speed = 0.3
+                    self.angle = 0
+                elif laser.ranges[30] < thresh:
+                    self.speed = 0.3
+                    self.angle = -0.5
+                elif laser.ranges[330] < thresh:
+                    self.speed = 0.3
+                    self.angle = 0.5
+            # else:
+            #     t = 0
+            elif range > thresh2:
+                self.collision_active = False
 # =============================
 # Main function
 # =============================
