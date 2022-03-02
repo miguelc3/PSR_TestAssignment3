@@ -301,7 +301,7 @@ class CamImg():
         
         for i, range in enumerate(laser.ranges):
             angle += laser.angle_increment*i
-            if laser.ranges[i] < thresh:
+            if range < thresh:
                 self.speed = 0.2
                 self.angle = -angle
             
