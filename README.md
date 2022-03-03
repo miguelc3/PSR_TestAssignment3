@@ -1,6 +1,15 @@
-# Team Hunt - PSR 2021/2022
+# Team Hunt - Group 11 - PSR 2021/2022
 
 This repository was developed for the course of PSR. The goal was to simulate a team hunt game with robots and also be able to drive a robot manually.
+
+## The game
+This project consists of two basic modes: <br>
+- Manual mode
+- Automatic mode (Team Hunt)
+
+Manual mode allows you to drive the robot using your own keyboard (just don't expect it to be like Gran Turismo). This also includes a visualization of what the robot is detecting (camera, laser), using RVIZ.<br>
+
+Automatic mode or Team Hunt is a game where 1 team out of 3 chases the others and tries to touch them. The game works by score, losing points or winning points, accordingly with the team you represent and if you catch or get caught. <br>
 
 ## Constitution of the Repository
 This repository has three packages: <br>
@@ -65,7 +74,8 @@ In this [link](https://youtu.be/gR2uT4AY4Go) you can see this working in a simul
 ## GMapping
 GMapping allows for data collection from the LIDAR sensor of our robot and form a map out of that.<br>
 If you want to see the results just use:<br>
-<code>rosrun gmapping slam_gmapping scan:=p_g11/scan _base_frame:=/p_g11/base_link _map_frame:=/p_g11/map _odom_frame:=/p_g11/odom</code><br><br>
+<code> roslaunch p_g11_bringup gmapping.launch </code> <br><br>
+This command must be inserted after spawning one robot visualizing it in rviz.
 
 ## Team Hunt Game
 ### Before Starting the Game
@@ -75,19 +85,16 @@ Before starting the game you need to have the gazebo world opened and the robots
 Starting the game means you have to put the robots in automatic mode, for that just insert the code:<br>
 <code>roslaunch p_g11_bringup auto_driver.launch</code><br><br>
 
-###
 
-
-
-
-## Referee
+### Referee
 There couldn't be a game without a referee, so there is node provided by our teacher which evaluates multiple parameters of the game like for example, if a player gets caught, and gives/takes points accordingly.<br>
 To play the game you need to run this program using this command:<br>
 <code>rosrun th_referee th_referee</code><br><br>
 
-## The Game
-Now that you have everithing working you can just watch the game. In the terminal where you are running the referee is where the results will appear. There you can see the team scores, individual and also the best hunter and best survivor.<br>
-By pressing this link you can see an example of the game working.
+### The Game
+Now that you have everithing working you can just watch the game. In the terminal where you are running the referee is where the results will appear. There you can see the team scores, individual and also the best hunter and best survivor. <br><br>
+By pressing this [link](https://youtu.be/_iph7fTkby4) you can see an example of the game working.<br>
+The simulation time of the game lasts around 9 min, but the real time is 80 seconds. This happens because the program runs very slowly on our computers.
 
 
 ## Contributors
