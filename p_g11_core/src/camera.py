@@ -85,6 +85,13 @@ class CamImg():
             self.bash(cmd, verbose=True)
             count += 1
 
+
+
+
+
+
+
+
         # print('My name is ' + self.name + '. I am team ' + self.my_team + ', I am hunting  ' +
         #       str(self.prey_team_players) + ' and fleeing from ' + str(self.hunter_team_players))
 

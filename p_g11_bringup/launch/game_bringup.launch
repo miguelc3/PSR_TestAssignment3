@@ -3,6 +3,9 @@
     <!--    <include command="load" file="$(find p_mpereira_bringup)/params/game.yaml"/>-->
     <rosparam command="load" file="$(find p_g11_bringup)/params/game.yaml"/>
 
+    <arg name="number_players" default="3"/>
+
+
 <!--    Arguments to activate rviz-->
     <arg name="visualize_blue1" default="false"/>
     <arg name="visualize_blue2" default="false"/>
@@ -15,106 +18,124 @@
     <arg name="visualize_red3" default="false"/>
 
     <!--    RED TEAM-->
-    <include file="$(find p_g11_bringup)/launch/bringup.launch">
-        <arg name="player_name" value="red1"/>
-        <arg name="player_color" value="Red"/>
-        <arg name="x_pos" value="1.0"/>
-        <arg name="y_pos" value="-2.0"/>
-        <arg name="z_pos" value="1.0"/>
-        <arg name="roll" value="0"/>
-        <arg name="pitch" value="0"/>
-        <arg name="yaw" value="1.55"/>
-    </include>
+    <group if="$(eval arg('number_players') == 1 or arg('number_players') == 2 or arg('number_players') == 3)">
+        <include file="$(find p_g11_bringup)/launch/bringup.launch">
+            <arg name="player_name" value="red1"/>
+            <arg name="player_color" value="Red"/>
+            <arg name="x_pos" value="1.0"/>
+            <arg name="y_pos" value="-2.0"/>
+            <arg name="z_pos" value="1.0"/>
+            <arg name="roll" value="0"/>
+            <arg name="pitch" value="0"/>
+            <arg name="yaw" value="1.55"/>
+        </include>
+    </group>
 
-    <include file="$(find p_g11_bringup)/launch/bringup.launch">
-        <arg name="player_name" value="red2"/>
-        <arg name="player_color" value="Red"/>
-        <arg name="x_pos" value="6.5"/>
-        <arg name="y_pos" value="4.0"/>
-        <arg name="z_pos" value="1.0"/>
-        <arg name="roll" value="0"/>
-        <arg name="pitch" value="0"/>
-        <arg name="yaw" value="3.1415"/>
-    </include>
+    <group if="$(eval arg('number_players') == 2 or arg('number_players') == 3)">
+        <include file="$(find p_g11_bringup)/launch/bringup.launch">
+            <arg name="player_name" value="red2"/>
+            <arg name="player_color" value="Red"/>
+            <arg name="x_pos" value="6.5"/>
+            <arg name="y_pos" value="4.0"/>
+            <arg name="z_pos" value="1.0"/>
+            <arg name="roll" value="0"/>
+            <arg name="pitch" value="0"/>
+            <arg name="yaw" value="3.1415"/>
+        </include>
+    </group>
 
-    <include file="$(find p_g11_bringup)/launch/bringup.launch">
-        <arg name="player_name" value="red3"/>
-        <arg name="player_color" value="Red"/>
-        <arg name="x_pos" value="-8.0"/>
-        <arg name="y_pos" value="4.0"/>
-        <arg name="z_pos" value="1.0"/>
-        <arg name="roll" value="0"/>
-        <arg name="pitch" value="0"/>
-        <arg name="yaw" value="-0.52"/>
-    </include>
+    <group if="$(eval arg('number_players') == 3)">
+        <include file="$(find p_g11_bringup)/launch/bringup.launch">
+            <arg name="player_name" value="red3"/>
+            <arg name="player_color" value="Red"/>
+            <arg name="x_pos" value="-8.0"/>
+            <arg name="y_pos" value="4.0"/>
+            <arg name="z_pos" value="1.0"/>
+            <arg name="roll" value="0"/>
+            <arg name="pitch" value="0"/>
+            <arg name="yaw" value="-0.52"/>
+        </include>
+    </group>
 
     <!--    GREEN TEAM-->
-    <include file="$(find p_g11_bringup)/launch/bringup.launch">
-        <arg name="player_name" value="green1"/>
-        <arg name="player_color" value="Green"/>
-        <arg name="x_pos" value="5.5"/>
-        <arg name="y_pos" value="-0.5"/>
-        <arg name="z_pos" value="1.0"/>
-        <arg name="roll" value="0"/>
-        <arg name="pitch" value="0"/>
-        <arg name="yaw" value="3.1415"/>
-    </include>
+    <group if="$(eval arg('number_players') == 1 or arg('number_players') == 2 or arg('number_players') == 3)">
+        <include file="$(find p_g11_bringup)/launch/bringup.launch">
+            <arg name="player_name" value="green1"/>
+            <arg name="player_color" value="Green"/>
+            <arg name="x_pos" value="5.5"/>
+            <arg name="y_pos" value="-0.5"/>
+            <arg name="z_pos" value="1.0"/>
+            <arg name="roll" value="0"/>
+            <arg name="pitch" value="0"/>
+            <arg name="yaw" value="3.1415"/>
+        </include>
+    </group>
 
-    <include file="$(find p_g11_bringup)/launch/bringup.launch">
-        <arg name="player_name" value="green2"/>
-        <arg name="player_color" value="Green"/>
-        <arg name="x_pos" value="-2.5"/>
-        <arg name="y_pos" value="-1.0"/>
-        <arg name="z_pos" value="1.0"/>
-        <arg name="roll" value="0"/>
-        <arg name="pitch" value="0"/>
-        <arg name="yaw" value="0"/>
-    </include>
+    <group if="$(eval arg('number_players') == 2 or arg('number_players') == 3)">
+        <include file="$(find p_g11_bringup)/launch/bringup.launch">
+            <arg name="player_name" value="green2"/>
+            <arg name="player_color" value="Green"/>
+            <arg name="x_pos" value="-2.5"/>
+            <arg name="y_pos" value="-1.0"/>
+            <arg name="z_pos" value="1.0"/>
+            <arg name="roll" value="0"/>
+            <arg name="pitch" value="0"/>
+            <arg name="yaw" value="0"/>
+        </include>
+    </group>
 
-    <include file="$(find p_g11_bringup)/launch/bringup.launch">
-        <arg name="player_name" value="green3"/>
-        <arg name="player_color" value="Green"/>
-        <arg name="x_pos" value="0"/>
-        <arg name="y_pos" value="2.8"/>
-        <arg name="z_pos" value="1.0"/>
-        <arg name="roll" value="0"/>
-        <arg name="pitch" value="0"/>
-        <arg name="yaw" value="-1.55"/>
-    </include>
+    <group if="$(eval arg('number_players') == 3)">
+        <include file="$(find p_g11_bringup)/launch/bringup.launch">
+            <arg name="player_name" value="green3"/>
+            <arg name="player_color" value="Green"/>
+            <arg name="x_pos" value="0"/>
+            <arg name="y_pos" value="2.8"/>
+            <arg name="z_pos" value="1.0"/>
+            <arg name="roll" value="0"/>
+            <arg name="pitch" value="0"/>
+            <arg name="yaw" value="-1.55"/>
+        </include>
+    </group>
 
     <!--    BLUE TEAM-->
-    <include file="$(find p_g11_bringup)/launch/bringup.launch">
-        <arg name="player_name" value="blue1"/>
-        <arg name="player_color" value="Blue"/>
-        <arg name="x_pos" value="2.5"/>
-        <arg name="y_pos" value="1.5"/>
-        <arg name="z_pos" value="1.0"/>
-        <arg name="roll" value="0"/>
-        <arg name="pitch" value="0"/>
-        <arg name="yaw" value="3.1415"/>
-    </include>
+    <group if="$(eval arg('number_players') == 1 or arg('number_players') == 2 or arg('number_players') == 3)">
+        <include file="$(find p_g11_bringup)/launch/bringup.launch">
+            <arg name="player_name" value="blue1"/>
+            <arg name="player_color" value="Blue"/>
+            <arg name="x_pos" value="2.5"/>
+            <arg name="y_pos" value="1.5"/>
+            <arg name="z_pos" value="1.0"/>
+            <arg name="roll" value="0"/>
+            <arg name="pitch" value="0"/>
+            <arg name="yaw" value="3.1415"/>
+        </include>
+    </group>
 
-    <include file="$(find p_g11_bringup)/launch/bringup.launch">
-        <arg name="player_name" value="blue2"/>
-        <arg name="player_color" value="Blue"/>
-        <arg name="x_pos" value="-7.0"/>
-        <arg name="y_pos" value="-1.5"/>
-        <arg name="z_pos" value="1.0"/>
-        <arg name="roll" value="0"/>
-        <arg name="pitch" value="0"/>
-        <arg name="yaw" value="0"/>
-    </include>
+    <group if="$(eval arg('number_players') == 2 or arg('number_players') == 3)">
+        <include file="$(find p_g11_bringup)/launch/bringup.launch">
+            <arg name="player_name" value="blue2"/>
+            <arg name="player_color" value="Blue"/>
+            <arg name="x_pos" value="-7.0"/>
+            <arg name="y_pos" value="-1.5"/>
+            <arg name="z_pos" value="1.0"/>
+            <arg name="roll" value="0"/>
+            <arg name="pitch" value="0"/>
+            <arg name="yaw" value="0"/>
+        </include>
+    </group>
 
-    <include file="$(find p_g11_bringup)/launch/bringup.launch">
-        <arg name="player_name" value="blue3"/>
-        <arg name="player_color" value="Blue"/>
-        <arg name="x_pos" value="-4.0"/>
-        <arg name="y_pos" value="2.0"/>
-        <arg name="z_pos" value="1.0"/>
-        <arg name="roll" value="0"/>
-        <arg name="pitch" value="0"/>
-        <arg name="yaw" value="0"/>
-    </include>
+    <group if="$(eval arg('number_players') == 3)">
+        <include file="$(find p_g11_bringup)/launch/bringup.launch">
+            <arg name="player_name" value="blue3"/>
+            <arg name="player_color" value="Blue"/>
+            <arg name="x_pos" value="-4.0"/>
+            <arg name="y_pos" value="2.0"/>
+            <arg name="z_pos" value="1.0"/>
+            <arg name="roll" value="0"/>
+            <arg name="pitch" value="0"/>
+            <arg name="yaw" value="0"/>
+        </include>
+    </group>
 
     <!--    Rviz - red team-->
     <group if="$(arg visualize_red1)">

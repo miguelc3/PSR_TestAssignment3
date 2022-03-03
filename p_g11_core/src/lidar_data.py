@@ -94,9 +94,9 @@ class Driver():
     def sendCommandCallback(self, event):
 
         print('Sending twist command')
-        print(self.goal_active)
-        print(self.finding_goal)
-        print(self.colision_active)
+        # print(self.goal_active)
+        # print(self.finding_goal)
+        # print(self.colision_active)
 
         if not self.colision_active:
             # Decision outputs a speed (linear velocity) and an angle

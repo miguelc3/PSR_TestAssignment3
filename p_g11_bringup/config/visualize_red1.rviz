@@ -5,14 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /RobotModel1
-        - /LaserScan1
-        - /TF1
-        - /TF1/Tree1/blue1/odom1
-        - /Map1
-        - /PointCloud21
-        - /MarkerArray1
-        - /Image1
       Splitter Ratio: 0.4716981053352356
     Tree Height: 514
   - Class: rviz/Selection
@@ -335,34 +327,6 @@ Visualization Manager:
           Value: true
         green3/wheel_right_link:
           Value: true
-        p_g11/base_footprint:
-          Value: true
-        p_g11/base_link:
-          Value: true
-        p_g11/base_scan:
-          Value: true
-        p_g11/camera_depth_frame:
-          Value: true
-        p_g11/camera_depth_optical_frame:
-          Value: true
-        p_g11/camera_link:
-          Value: true
-        p_g11/camera_rgb_frame:
-          Value: true
-        p_g11/camera_rgb_optical_frame:
-          Value: true
-        p_g11/caster_back_left_link:
-          Value: true
-        p_g11/caster_back_right_link:
-          Value: true
-        p_g11/imu_link:
-          Value: true
-        p_g11/odom:
-          Value: true
-        p_g11/wheel_left_link:
-          Value: true
-        p_g11/wheel_right_link:
-          Value: true
         red1/base_footprint:
           Value: true
         red1/base_link:
@@ -454,138 +418,6 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        blue1/odom:
-          blue1/base_footprint:
-            blue1/base_link:
-              blue1/base_scan:
-                {}
-              blue1/camera_link:
-                blue1/camera_depth_frame:
-                  blue1/camera_depth_optical_frame:
-                    {}
-                blue1/camera_rgb_frame:
-                  blue1/camera_rgb_optical_frame:
-                    {}
-              blue1/caster_back_left_link:
-                {}
-              blue1/caster_back_right_link:
-                {}
-              blue1/imu_link:
-                {}
-              blue1/wheel_left_link:
-                {}
-              blue1/wheel_right_link:
-                {}
-        blue2/odom:
-          blue2/base_footprint:
-            blue2/base_link:
-              blue2/base_scan:
-                {}
-              blue2/camera_link:
-                blue2/camera_depth_frame:
-                  blue2/camera_depth_optical_frame:
-                    {}
-                blue2/camera_rgb_frame:
-                  blue2/camera_rgb_optical_frame:
-                    {}
-              blue2/caster_back_left_link:
-                {}
-              blue2/caster_back_right_link:
-                {}
-              blue2/imu_link:
-                {}
-              blue2/wheel_left_link:
-                {}
-              blue2/wheel_right_link:
-                {}
-        blue3/odom:
-          blue3/base_footprint:
-            blue3/base_link:
-              blue3/base_scan:
-                {}
-              blue3/camera_link:
-                blue3/camera_depth_frame:
-                  blue3/camera_depth_optical_frame:
-                    {}
-                blue3/camera_rgb_frame:
-                  blue3/camera_rgb_optical_frame:
-                    {}
-              blue3/caster_back_left_link:
-                {}
-              blue3/caster_back_right_link:
-                {}
-              blue3/imu_link:
-                {}
-              blue3/wheel_left_link:
-                {}
-              blue3/wheel_right_link:
-                {}
-        green1/odom:
-          green1/base_footprint:
-            green1/base_link:
-              green1/base_scan:
-                {}
-              green1/camera_link:
-                green1/camera_depth_frame:
-                  green1/camera_depth_optical_frame:
-                    {}
-                green1/camera_rgb_frame:
-                  green1/camera_rgb_optical_frame:
-                    {}
-              green1/caster_back_left_link:
-                {}
-              green1/caster_back_right_link:
-                {}
-              green1/imu_link:
-                {}
-              green1/wheel_left_link:
-                {}
-              green1/wheel_right_link:
-                {}
-        green2/odom:
-          green2/base_footprint:
-            green2/base_link:
-              green2/base_scan:
-                {}
-              green2/camera_link:
-                green2/camera_depth_frame:
-                  green2/camera_depth_optical_frame:
-                    {}
-                green2/camera_rgb_frame:
-                  green2/camera_rgb_optical_frame:
-                    {}
-              green2/caster_back_left_link:
-                {}
-              green2/caster_back_right_link:
-                {}
-              green2/imu_link:
-                {}
-              green2/wheel_left_link:
-                {}
-              green2/wheel_right_link:
-                {}
-        green3/odom:
-          green3/base_footprint:
-            green3/base_link:
-              green3/base_scan:
-                {}
-              green3/camera_link:
-                green3/camera_depth_frame:
-                  green3/camera_depth_optical_frame:
-                    {}
-                green3/camera_rgb_frame:
-                  green3/camera_rgb_optical_frame:
-                    {}
-              green3/caster_back_left_link:
-                {}
-              green3/caster_back_right_link:
-                {}
-              green3/imu_link:
-                {}
-              green3/wheel_left_link:
-                {}
-              green3/wheel_right_link:
-                {}
         red1/odom:
           red1/base_footprint:
             red1/base_link:
@@ -677,6 +509,22 @@ Visualization Manager:
       Transport Hint: raw
       Unreliable: false
       Value: true
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.10000000149011612
+      Class: rviz/Pose
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.30000001192092896
+      Head Radius: 0.10000000149011612
+      Name: Pose
+      Queue Size: 10
+      Shaft Length: 1
+      Shaft Radius: 0.05000000074505806
+      Shape: Arrow
+      Topic: /move_base_simple/goal
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -713,17 +561,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 0.08182917535305023
+        Y: 0.37884044647216797
+        Z: 1.7742507457733154
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.15539777278900146
+      Pitch: 1.0753978490829468
       Target Frame: <Fixed Frame>
-      Yaw: 3.7285828590393066
+      Yaw: 3.6785826683044434
     Saved: ~
 Window Geometry:
   Displays:
