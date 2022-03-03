@@ -53,11 +53,17 @@ This will spawn in the gazebo world 3 robots for each team (red, green and blue)
 
 It's also possible to choose the number of players per team. For example, if we want two player per team, 
 we could write, in te terminal:<br>
-<code>roslaunch p_g11_bringup bringup.launch number_players:=2</code><br><br>
+<code>roslaunch p_g11_bringup game_bringup.launch number_players:=2</code><br><br>
 
 #### Visaulize one robot in RVIZ
 You can see one of these robots in rviz by typing the following code instead:<br>
-<code>roslaunch p_g11_bringup game_bringup.launch visualize_red1:=true</code><br><br>
+<code>roslaunch p_g11_bringup game_bringup.launch visualize_red1:=true</code><br>
+And substitute **red1** by the name of the player you want.
+
+### Define goal in RVIZ
+Also, if we want to give specific goal to a robot it's possible to run the following, 
+in the terminal:<br>
+<code>rosrun p_g11_core lidar_data.py __name:=red1</code><br>
 And substitute **red1** by the name of the player you want.
 
 ## Manual Driving
