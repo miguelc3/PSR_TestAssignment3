@@ -14,7 +14,7 @@ Automatic mode or Team Hunt is a game where 1 team out of 3 chases the others an
 ## Constitution of the Repository
 This repository has three packages: <br>
 - p_g11_bringup - This is responsible for launching the other files, because it has all the launch files necessary to run this program;
-- p_g11_description - Has the information about the building of the robots and the worlds;
+- p_g11_description - Has the xacro files and the information about the building of the robots and the worlds;
 - p_g11_core - In this package we can find the code for the functioning of the robots. This is what make them move.
 
 ## Functionalities
@@ -45,13 +45,19 @@ To spawn just one robot, for example to the manual driving, it is necessary to t
 It's possible to vizualize the robot in rviz with this code:<br>
 <code>roslaunch p_g11_bringup bringup.launch visualize:=true</code><br><br>
 
+
 ### 9 Robots, 3 for each team
 If you want to run the team hunt game, you can use the following code:<br>
 <code>roslaunch p_g11_bringup game_bringup.launch</code><br><br>
 This will spawn in the gazebo world 3 robots for each team (red, green and blue).<br>
+
+It's also possible to choose the number of players per team. For example, if we want two player per team, 
+we could write, in te terminal:<br>
+<code>roslaunch p_g11_bringup bringup.launch number_players:=2</code><br><br>
+
 #### Visaulize one robot in RVIZ
 You can see one of these robots in rviz by typing the following code instead:<br>
-<code>roslaunch p_g11_bringup game_bringup.launch visualize:=red1</code><br><br>
+<code>roslaunch p_g11_bringup game_bringup.launch visualize_red1:=true</code><br><br>
 And substitute **red1** by the name of the player you want.
 
 ## Manual Driving
@@ -59,15 +65,15 @@ After spawning just one robot you it's possible to drive it manualy by running t
 <code>roslaunch p_g11_bringup myteleop.launch</code><br><br>
 After this you can drive the robot with the keys shown in this table:
 
-| Key         | Action                          |
-| ----------- | -----------                     |
-| w           | Increase the speed              |
-| x           | Decrease the speed              |
-| a           | Turn Left                       |
-| d           | Turn Right                      |
-| s           | Stop Turning                    |
-| space       | Stop moving the robot           |
-| q           | Exit the program                |
+| Key         | Action                                  |
+| ----------- |-----------------------------------------|
+| w           | Increase the speed                      |
+| x           | Decrease the speed                      |
+| a           | Turn Left                               |
+| d           | Turn Right                              |
+| s           | Stop Turning, speed continuous the same |
+| space       | Stop moving the robot                   |
+| q           | Exit the program                        |
 
 In this [link](https://youtu.be/gR2uT4AY4Go) you can see this working in a simulation.
 
