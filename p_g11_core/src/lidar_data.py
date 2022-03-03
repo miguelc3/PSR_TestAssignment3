@@ -43,7 +43,6 @@ class Driver():
 
         self.goal_subscriber = rospy.Subscriber('/move_base_simple/goal', PoseStamped, self.goalReceivedCallback)
 
-        self.finding_goal = True
         self.colision_active = False
         self.colision_subscriber = rospy.Subscriber('/' + self.name + '/scan', LaserScan, self.callbackMessageReceived)
 
@@ -53,30 +52,21 @@ class Driver():
 
         target_frame = self.name + '/odom'
 
-        if self.finding_goal:
-            try:
-                self.goal = self.tf_buffer.transform(msg, target_frame, rospy.Duration(1))
-                self.goal_active = True
-                self.finding_goal = False
-                rospy.logwarn('Setting new goal')
-            except(tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
-                self.goal_active = False
-                self.finding_goal = True
-                rospy.logerr(
-                    'Could not transform goal from ' + msg.header.frame_id + ' to ' + target_frame + '. Will ignore this goal')
-
-        # print('Received new goal')
-        # self.goal = copy.copy(msg)  # Store goal
-        # self.goal_active = True
+        try:
+            self.goal = self.tf_buffer.transform(msg, target_frame, rospy.Duration(1))
+            self.goal_active = True
+            self.finding_goal = False
+            rospy.logwarn('Setting new goal')
+        except(tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+            self.goal_active = False
+            self.finding_goal = True
+            rospy.logerr(
+                'Could not transform goal from ' + msg.header.frame_id + ' to ' + target_frame + '. Will ignore this goal')
 
     def driveSraight(self, min_speed=0.2, max_speed=0.5):
 
         goal_copy = copy.deepcopy(self.goal)  # make sure we don't change the stamp field of the goal
         goal_copy.header.stamp = rospy.Time.now()
-
-        # goal_tf = tf2_geometry_msgs.PoseStamped()
-        # goal_tf.header.stamp = rospy.Time.now()
-        # goal_tf.header.frame_id = self.goal.header.frame_id
 
         print('Transforming pose')
         goal_in_base_link = self.tf_buffer.transform(goal_copy, self.name + '/base_footprint', rospy.Duration(1))
@@ -88,8 +78,11 @@ class Driver():
         self.angle = math.atan2(y, x)
         distance_to_goal = math.sqrt(x ** 2 + y ** 2)
 
-        self.speed = max(min_speed, 0.5 * distance_to_goal)  # Limit min speed
-        self.speed = min(max_speed, self.speed)  # Limit max speed
+        if distance_to_goal > 0.2:
+            self.speed = max(min_speed, 0.5 * distance_to_goal)  # Limit min speed
+            self.speed = min(max_speed, self.speed)  # Limit max speed
+        else:
+            self.speed = 0
 
     def sendCommandCallback(self, event):
 
@@ -125,8 +118,7 @@ class Driver():
             theta = msg.angle_min + msg.angle_increment * i
             if range < thresh:
                 t = time()
-                self.goal_active = False
-                self.finding_goal = False
+                # self.goal_active = False
                 self.colision_active = True
 
                 if msg.ranges[0] < thresh:
@@ -141,17 +133,9 @@ class Driver():
                 elif msg.ranges[330] < thresh:
                     self.speed = 0.3
                     self.angle = 0.5
-            # else:
-            #     t = 0
-            # elif range > thresh2:
-            #     self.colision_active = False
-            #     self.finding_goal = True
 
-
-            # if t > time_avoid:
-            #     self.colision_active = False
-            #     self.speed = 0
-            #     self.angle = 0
+            elif range > thresh2:
+                self.colision_active = False
 
 
 def main():
@@ -159,8 +143,6 @@ def main():
     # INITIALIZATION
     # =================================
     rospy.init_node('p_g11', anonymous=False)
-
-    # rospy.Subscriber('/p_g11/scan', LaserScan, callbackMessageReceived)
 
     driver = Driver()
     rospy.spin()

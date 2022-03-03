@@ -155,14 +155,6 @@ class CamImg():
 
     def largest_object(self, mask, state):
 
-        # Verify if it is running away or hunting
-        if state == 'hunting':
-            self.hunting = True
-            self.running = False
-        elif state == 'running':
-            self.running = True
-            self.hunting = False
-
         # Initialize the the window of the largest object -> all black
         self.mask_largest = np.zeros(mask.shape, dtype=np.uint8)
 
@@ -187,8 +179,17 @@ class CamImg():
 
         if np.count_nonzero(self.mask_largest) > 0:
             self.goal_active = True
+            # Verify if it is running away or hunting
+            if state == 'hunting':
+                self.hunting = True
+                #self.running = False
+            elif state == 'running':
+                self.running = True
+                #self.hunting = False
         else:
             self.goal_active = False
+            self.hunting = False
+            self.running = False
 
         self.mask_largest = cv2.circle(self.mask_largest, (self.cx, cy), 2, (0, 0, 0), -1)
         # self.show_image(self.mask_largest, 'Mask hunt largest')
@@ -205,6 +206,8 @@ class CamImg():
                 self.angle = 0.5
             elif self.goal_active:
                 self.drive_straight()
+                # self.hunting = False
+                # self.running = False
 
         # Build the Twist message
         twist = Twist()
@@ -242,7 +245,10 @@ class CamImg():
                 self.angle = -1
             else:
                 self.angle = -0.5
-        elif self.running:
+
+            #self.hunting = False
+
+        elif self.running and not self.hunting:
             # Define angle
             if self.cx > center / 2:
                 self.angle = 0.5
@@ -255,6 +261,10 @@ class CamImg():
             else:
                 self.angle = -1
 
+            #self.running = False
+
+        self.hunting = False
+        self.running = False
         # Define speed - constant
         self.speed = 1
 
@@ -263,8 +273,6 @@ class CamImg():
 
     def callbackLaserReceived(self, laser):
         # Function to avoid going into the walls
-        # h = False
-        # r = False
 
         rospy.loginfo('Received laser scan message')
 
